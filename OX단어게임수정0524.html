@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OX단어게임</title>
+    <style>
+        #wrapper {
+            width: 300px;
+            height: 400px;
+            background: skyblue;
+            margin: auto;
+            /*border: 5px solid darkcyan;*/
+            box-sizing: border-box;
+        }
+
+        #content {
+            width: 100%;
+            height: 150px;
+            background: skyblue;
+            font-size: 50px;
+            font-weight: bold;
+            text-align: center;
+            padding-top: 35px;
+            box-sizing: border-box;
+        }
+
+        #t_wrapper {
+            width: 100%;
+            height: 50px;
+            background: gray;
+            text-align: center;
+        }
+
+        #t_wrapper input {
+            width: 96%;
+            height: 96%;
+            font-size: 35px;
+            text-align: center;
+        }
+
+        #result {
+            width: 100%;
+            height: 100px;
+            background: whitesmoke;
+            font-size: 80px;
+            font-weight: bold;
+            color: red;
+            text-align: center;
+            /*padding-top: 0px;*/
+            box-sizing: border-box;
+        }
+
+        #footer {
+            width: 100%;
+            height: 100px;
+            background: palegreen;
+            font-size: 50px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+    <script>
+        let keyword; //input
+        let content; //단어 출력부
+        let result; //피드백 출력부(O.X)
+        let footer; //점수 출력부
+        let index = 0; //배열의 요소들을 접근할 index, 이 변수 index에 의해 등장할 단어가 결정됨
+
+        let score = 0; //게임이 진행되는 동안 점수는 누적되어야하므로, 전역변수로 선언
+
+        let wordArray = [
+            "눈사람",
+            "수국",
+            "햄버거",
+            "비행기",
+            "올림픽",
+            "바디로션",
+            "올리브",
+            "아이폰",
+            "백과사전",
+            "여름"
+        ];
+
+        //단어등장 시키기
+        function showWord() {
+
+            content.innerText = wordArray[index];
+            if (index<wordArray.length-1) { //배열의 범위 내에서만
+                index++;
+            }
+        }
+
+        function showScore() {
+
+            footer.innerText = score + " 점";
+
+            if (score==100){ //배열의 범위 내에서만
+                footer.innerText = 100 + "점";
+                alert("끝이다 뿅");
+            }
+        }
+
+        function init() {
+            //문서 내 텍스트박스 keyword에 커서올리기
+            content = document.getElementById("content");
+            result = document.getElementById("result");
+            footer = document.getElementById("footer");
+            keyword = document.getElementById("keyword");
+            keyword.focus(); //커서올리기
+
+        }
+
+
+
+        //문서가 로드되면
+        addEventListener("load", function () {
+            init();
+            showWord(); //단어등장시키기
+            showScore(); //점수출력
+
+            //텍스트 박스에 이벤트 연결
+            keyword.addEventListener("keyup", function () {
+                console.log("키보드눌렀어?", event.keyCode);
+
+                if (event.keyCode == 13) {
+                    //단어끼리 일치한다면 다음단어가 나오게
+                    //content div 내 innerText 와 keyword value값이 동일하다면
+                    if (content.innerText == keyword.value) {
+                        showWord();
+                        result.innerText = "O";
+                        score += 10; //기존점수에 10추가
+                        showScore();
+
+                        //100점까지 나오게하려면 어디에 코드를 
+                        if(score==100){
+                            footer.innerText = "";
+                            score=100
+                        }
+                    } else {
+                        result.innerText = "X";
+                    }
+
+                    //입력한 단어 초기화
+                    keyword.value = "";
+                }
+
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="content"></div>
+        <div id="t_wrapper">
+            <input type="text" id="keyword">
+        </div>
+        <div id="result">O</div>
+        <div id="footer"></div>
+    </div>
+</body>
+
+</html>

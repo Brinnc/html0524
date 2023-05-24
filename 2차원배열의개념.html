@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2차원배열의개념</title>
+</head>
+<script>
+    //1차원 배열
+    let fruit = ["사과", "딸기", "포도", "멜론"];
+    let car = ["벤츠", "BMW", "제네시스", "아우디"];
+    let subject = ["java", "JSP", "Spring", "Oracle"];
+
+    let box = [];
+    box.push(fruit); //새로운 공간을 추가한 후, 데이터 넣기, 이 시점부터 2차원 배열
+    box.push(car); //2층짜리 2차원배열
+    box.push(subject); //3층짜리 2차원배열
+
+    //이중for문==2차원배열
+    for (let a = 0; a < box.length; a++) {
+        for (let i = 0; i < box[a].length; i++) {
+            document.write(box[a][i]);
+        }
+        document.write("<br>"); //층은 바깥쪽과 관련되어있으므로
+    }
+
+    /*
+    //첫번째 층에 있는 모든 과일명을 출력
+    for (let i = 0; i < box[0].length; i++) {
+        console.log(box[0][i]);
+    }
+    //두번째 층에 있는 모든 데이터값을 출력
+    for (let i = 0; i < box[1].length; i++) {
+        console.log(box[1][i]);
+    }
+    //세번째 층에 있는 모든 데이터값을 출력
+    for (let i = 0; i < box[2].length; i++) {
+        console.log(box[2][i]);
+    }
+    */
+
+</script>
+
+<body>
+
+</body>
+
+</html>

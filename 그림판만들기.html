@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미니그림판</title>
+    <style>
+        #wrapper {
+            width: 700px;
+            height: 550px;
+            background: black;
+            margin: auto;
+            text-align: center;
+        }
+
+        #wrapper select {
+            width: 200px;
+            font-size: 15px;
+        }
+
+        #header {
+            width: 100%;
+            height: 50px;
+            background: lightgray;
+            box-sizing: border-box;
+            padding-top: 15px;
+        }
+
+        #header button {
+            font-weight: bold;
+            width: 70px;
+            height: 20px;
+            font-size: 12px;
+        }
+
+        #r {
+            width: 70px;
+            height: 20px;
+            background: red;
+            display: inline-block;
+            font-weight: bold;
+            color: whitesmoke;
+            border-radius: 5px;
+        }
+
+        #g {
+            width: 70px;
+            height: 20px;
+            background: yellowgreen;
+            display: inline-block;
+            font-weight: bold;
+            color: whitesmoke;
+            border-radius: 5px;
+        }
+
+        #b {
+            width: 70px;
+            height: 20px;
+            background: blue;
+            display: inline-block;
+            font-weight: bold;
+            color: whitesmoke;
+            border-radius: 5px;
+        }
+
+        #content {
+            width: 100%;
+            height: 500px;
+            background: darkgreen;
+            box-sizing: border-box;
+            position: relative;
+        }
+    </style>
+    <script>
+        //요소들의 전역변수화
+        let sel; //select박스
+        let r, g, b; //연필 색상, 쉼표를 사용해 변수를 한꺼번에 선언 가능
+        let bt; //재생 버튼
+        let content; //그림 그릴 영역
+        let flag = false; //마우스 누를 때, 안 누를때
+        let dotWidth = 2; //점의 너비, 연필의 두께를 결정하는 전역변수
+        let dotHeight = 2; //점의 높이
+        let dotImg = "dot.png"
+        let dot;
+
+        let dotList = []; //도트들의 좌표값들 모으는 배열
+        let index = 0;
+
+        let draw=false; //재생버튼?
+
+        //3)
+        //문서 내 점을 표현하는 이미지를 동적으로 생성하여 content에 붙이자(좌표는 마우스의 좌표)
+        function createDot(x, y) {
+            dot = document.createElement("img");
+            dot.src = "../images/" + dotImg;
+            dot.style.width = dotWidth + "px";
+            dot.style.height = dotHeight + "px";
+            dot.style.position = "absolute";
+            dot.style.left = x + "px";
+            dot.style.top = y + "px";
+
+            //dot 두께 변경
+            if (sel.value == 1) {
+                dotWidth = 2
+                dotHeight = 2
+            } else if (sel.value == 4) {
+                dotWidth = 4
+                dotHeight = 4
+            } else if (sel.value == 7) {
+                dotWidth = 8
+                dotHeight = 8
+            }
+
+            //content div에 생성된 도트를 부착
+            content.appendChild(dot);
+
+            let pos = [x, y];
+            dotList.push(pos); //xy좌표값을 dotList값에 담음
+
+        }
+
+        function move() {
+            dot.style.left = dotList[index][0] + "px"; //x
+            dot.style.top = dotList[index][1] + "px"; //y
+         
+            index++;
+          
+            
+            createDot();
+        }
+
+        //색을 변경
+        function changeR() { //빨강
+            dotImg = "dot_r.png";
+        }
+        function changeG() { //초록
+            dotImg = "dot_l.png";
+        }
+        function changeB() { //파랑
+            dotImg = "dot_b.png";
+        }
+
+        //1)
+        function init() {
+            content = document.getElementById("content");
+            sel = document.getElementById("sel");
+            r = document.getElementById("r");
+            g = document.getElementById("g");
+            b = document.getElementById("b");
+            bt = document.querySelector("button");
+        }
+
+        //1)
+        addEventListener("load", function () {
+            init();
+
+            setInterval("move()", 100);
+
+            //2)
+            //content에 마우스 누름과 뗌 이벤트 연결
+            content.addEventListener("mousedown", function () {
+                flag = true; //그릴 의도가 있음
+            });
+            content.addEventListener("mouseup", function () {
+                flag = false; //그릴 의도가 없음
+            });
+
+            bt.addEventListener("click", function(){
+                move();
+            });
+
+            //content에 이벤트 연결
+            content.addEventListener("mousemove", function () {
+                if (flag) {
+                    console.log("움직인다~");
+
+                    //content라는 div를 기준으로 한 좌표를 넘겨야함
+                    createDot(event.offsetX, event.offsetY);
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <div id="wrapper">
+        <div id="header">
+            <select id="sel">
+                <option value="1">두께선택</option>
+                <option value="1">1</option>
+                <option value="4">4</option>
+                <option value="7">7</option>
+            </select>
+            <div id="r" onClick="changeR()">RED</div>
+            <div id="b" onClick="changeB()">BLUE</div>
+            <div id="g" onClick="changeG()">GREEN</div>
+            <button onClick="content.innerText='' ">PLAY ▶</button>
+        </div>
+        <div id="content"></div>
+    </div>
+</body>
+
+</html>
